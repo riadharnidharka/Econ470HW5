@@ -8,7 +8,7 @@
 
 
 # Preliminaries -----------------------------------------------------------
-kff.dat <- read_csv('data/input/KFF/KFF_medicaid_expansion_2019.csv')
+kff.dat <- read_csv('data/input/medicaid_raw_data.csv')
 
 # Clean KFF data -------------------------------------------------------
 
