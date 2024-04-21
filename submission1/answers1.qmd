@@ -1,0 +1,35 @@
+---
+title: "Homework 5"
+subtitle: "Research in Health Economics, Spring 2024 https://github.com/riadharnidharka/Econ470HW5"
+author: "Ria Dharnidharka"
+format:
+  pdf:
+    output-file: "dharnidharka-r-hwk5-1"
+    output-ext:  "pdf"
+    header-includes:
+      - \usepackage{float}
+      - \floatplacement{table}{H}
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE)
+``````{r}
+#| include: false
+
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyverse, ggplot2, dplyr, lubridate, readr, readxl, hrbrthemes, fixest,
+               scales, gganimate, gapminder, gifski, png, tufte, plotly, OECD,
+               ggrepel, survey, foreign, devtools, pdftools, kableExtra, modelsummary,
+               kableExtra)
+```
+```{r}
+#| include: false
+#| eval: true
+
+ 
+load("Hw5_workspace.Rdata")
+```
+\newpage
+
+\vspace{.2in}
+\noindent 1. Plot the share of the adult population with direct purchase health insurance over time.
+

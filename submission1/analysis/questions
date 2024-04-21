@@ -209,3 +209,6 @@ question10 <- iplot(mod.twfe,
                      main = 'Event study')
 
 question10
+
+rm(list=c("final.insurance", "mcaid.data","ins.plot.dat", "mcaid.data_filtered", "reg.dat"))
+save.image("submission1/Hw5_workspace.Rdata")
