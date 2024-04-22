@@ -10,9 +10,7 @@ format:
       - \usepackage{float}
       - \floatplacement{table}{H}
 ---
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(warning = FALSE)
-``````{r}
+```{r}
 #| include: false
 
 if (!require("pacman")) install.packages("pacman")
@@ -20,6 +18,10 @@ pacman::p_load(tidyverse, ggplot2, dplyr, lubridate, readr, readxl, hrbrthemes, 
                scales, gganimate, gapminder, gifski, png, tufte, plotly, OECD,
                ggrepel, survey, foreign, devtools, pdftools, kableExtra, modelsummary,
                kableExtra)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE)
 ```
 ```{r}
 #| include: false
@@ -45,7 +47,7 @@ question1
 \vspace{.2in}
 \noindent 2. Discuss the reduction in direct purchase health insurance in later years. Can you list a couple of policies that might have affected the success of the direct purchase insurance market?
 
-
+Direct purchase of health insurance has decreased starting in 2016 steadily. Some policies that may have contributed to this decrease include the expansion of Medicaid, which would allow more people to opt for Medicaid coverage rather than direct purchase of insurance. The Affordable Care Act reforms also may have contributed because they can make various plans look more or less attractive. 
 
 \newpage
 \vspace{.2in}
@@ -91,7 +93,14 @@ knitr::kable(avg_did,
 \vspace{.2in}
 \noindent 6. Estimate the effect of Medicaid expansion on the uninsurance rate using a standard DD regression estimator, again focusing only on states that expanded in 2014 versus those that never expanded.
 
+```{r}
+#| echo: false
+#| label: expanded
+#| fig-cap: "Effect of Medicaid Expansion on Unisurance"
 
+question6
+```
+\newpage
 
 \newpage
 \vspace{.2in}
