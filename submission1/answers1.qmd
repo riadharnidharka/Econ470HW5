@@ -95,12 +95,15 @@ knitr::kable(avg_did,
 
 ```{r}
 #| echo: false
-#| label: expanded
-#| fig-cap: "Effect of Medicaid Expansion on Unisurance"
+#| label: DDestimator
+#| tbl-cap: Question 6 
 
-question6
+
+modelsummary(list("DD (2014)" = dd.ins.reg),
+                          shape = term + statistic ~ model, 
+                          gof_map = NA,
+                          coef_omit = 'Intercept')
 ```
-\newpage
 
 \newpage
 \vspace{.2in}
