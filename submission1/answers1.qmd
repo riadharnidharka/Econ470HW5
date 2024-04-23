@@ -110,7 +110,6 @@ modelsummary(list("DD (2014)" = dd.ins.reg),
 \noindent 7.Include state and year fixed effects in your estimates. Try using the lfe or fixest package to estimate this instead of directly including the fixed effects.
 
 
-\newpage 
 
 \vspace{.2in}
 \noindent 8. Repeat the analysis in question 7 but include all states (even those that expanded after 2014). Are your results different? If so, why? 
@@ -126,7 +125,10 @@ modelsummary(list("DD (2014)" = dd.ins.reg),
 #| label: question9
 #| fig-cap: Event Study
 
-question9
+
+iplot(mod.twfe9, 
+                   xlab = 'Time to treatment',
+                   main = 'Event study')
 ```
 
 
@@ -141,5 +143,9 @@ question9
 #| label: question10
 #| fig-cap: Event Study 2
 
-question10
+
+iplot(mod.twfe10, 
+                     xlab = 'Time to treatment',
+                     main = 'Event study')
+
 ```
