@@ -109,11 +109,13 @@ modelsummary(list("DD (2014)" = dd.ins.reg),
 \vspace{.2in}
 \noindent 7.Include state and year fixed effects in your estimates. Try using the lfe or fixest package to estimate this instead of directly including the fixed effects.
 
+![q7](q7screenshot.png)
 
-
+\newpage
 \vspace{.2in}
 \noindent 8. Repeat the analysis in question 7 but include all states (even those that expanded after 2014). Are your results different? If so, why? 
 
+![q8](q8screenshot.png)
 
 \newpage 
 
