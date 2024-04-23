@@ -135,7 +135,7 @@ modelsummary(list("DD (2014)" = dd.ins.reg),
 | treat    | -0.017  | -0.017  |
 |          | (0.006) | (0.006) |
 
-My results are 
+My results are similar for the coefficient estimates for postTRUE and expand_everTRUE amongst both tables, but there are slight differences in the standard errors. The coefficient estimate for treat is the same for both tables. The slight differences may be due to the inclusion of all states in the second table.
 
 \newpage 
 
