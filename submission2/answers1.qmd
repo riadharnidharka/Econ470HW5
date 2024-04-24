@@ -75,18 +75,20 @@ question4
 \vspace{.2in}
 \noindent 5. Calculate the average percent of uninsured individuals in 2012 and 2015, separately for expansion and non-expansion states. Present your results in a basic 2x2 DD table.
 
-```{r} 
+```{r}
 #| echo: false
-#| label: uninsured20122015
-#| tbl-cap: "Uninsured Individuals in 2012 and 2015"
+#| label: tbl-ddtable
+#| tbl-cap: "DD Table for Medicaid Expansion"
 
-library(kableExtra)
-options(knitr.kable.NA = 0)
-knitr::kable(avg_did, 
-             col.names=c("expand_ever", "avg_diff_uninsured"),
-             format.args=list(big.mark=","), booktabs = TRUE) %>%
-             kable_styling(latex_options=c("scale_down"))
-
+knitr::kable(dd.table, 
+             col.names=c("Group", "Pre", "Post"),
+             digits=2,
+             booktabs = TRUE,
+             escape=F,
+             align="l",
+             format='latex') %>% 
+  kable_styling(full_width=F,
+                latex_options="hold_position")
 ```
 \newpage
 
@@ -95,45 +97,53 @@ knitr::kable(avg_did,
 
 ```{r}
 #| echo: false
-#| label: DDestimator
-#| tbl-cap: Question 6 
+#| label: ddregs
+#| tbl-cap: "DD Estimates for Medicaid Expansion"
 
-
-modelsummary(list("DD (2014)" = dd.ins.reg),
-                          shape = term + statistic ~ model, 
-                          gof_map = NA,
-                          coef_omit = 'Intercept')
+modelsummary(dd.est,
+             coef_rename=c("postTRUE" = "Post 2014","expand_everTRUE"="Expand",
+                           "treat" = "Post x Expand"),
+             gof_omit='DF|F|Lik|AIC|BIC|Adj') %>%
+    kable_styling(latex_options="hold_position")
 ```
 
 \newpage
 \vspace{.2in}
 \noindent 7.Include state and year fixed effects in your estimates. Try using the lfe or fixest package to estimate this instead of directly including the fixed effects.
 
+```{r}
+#| echo: false
+#| label: ddregs2
+#| tbl-cap: "DD Estimates for Medicaid Expansion with TWFE"
 
-|          | DD      | TWFE    |
-|----------|---------|---------|
-| postTRUE | -0.054  |         |
-|          | (-0.003) |         |
-| expand_everTRUE | -0.046 |         |
-|                 | (-0.016)|         |
-| treat    | -0.019  | -0.019  |
-|          | (0.007) | (0.007) |
-
+models <- list("Standard DD" = dd.est, 
+               "TWFE" = fe.est)
+modelsummary(models,
+             coef_rename=c("postTRUE" = "Post 2014","expand_everTRUE"="Expand",
+                           "treat" = "Post x Expand"),
+             gof_omit='DF|F|Lik|AIC|BIC|Adj') %>%
+    kable_styling(latex_options="hold_position")
+```
 
 
 \newpage
 \vspace{.2in}
 \noindent 8. Repeat the analysis in question 7 but include all states (even those that expanded after 2014). Are your results different? If so, why? 
 
+```{r}
+#| echo: false
+#| label: ddregs3
+#| tbl-cap: "DD Estimates for Medicaid Expansion with Staggered Treatment"
 
-|          | DD      | TWFE    |
-|----------|---------|---------|
-| postTRUE | -0.054  |         |
-|          | (0.003) |         |
-| expand_everTRUE | -0.040 |         |
-|                 | (0.015) |         |
-| treat    | -0.017  | -0.017  |
-|          | (0.006) | (0.006) |
+models <- list("Standard DD" = dd.est, 
+               "TWFE" = fe.est,
+               "Time-varying Treatment" = fe.est2)
+modelsummary(models,
+             coef_rename=c("postTRUE" = "Post 2014","expand_everTRUE"="Expand",
+                           "treat" = "Post x Expand"),
+             gof_omit='DF|F|Lik|AIC|BIC|Adj') %>%
+    kable_styling(latex_options="hold_position")
+```
 
 My results are similar for the coefficient estimates for postTRUE and expand_everTRUE amongst both tables, but there are slight differences in the standard errors. The coefficient estimate for treat is the same for both tables. The slight differences may be due to the inclusion of all states in the second table.
 
