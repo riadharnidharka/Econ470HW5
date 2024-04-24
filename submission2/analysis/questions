@@ -81,24 +81,24 @@ question4
 library(tidyverse)
 
 # Read in the data
-mcaid.data <- read_tsv("data/output/acs_medicaid.txt")
+dd.table <- final.data %>% 
+  filter(is.na(expand_year) | expand_year==2014) %>%
+  filter(year %in% c(2012, 2015)) %>%  
+  group_by(expand_ever, year) %>%
+  summarize(uninsured=mean(perc_unins))
 
-# Filter the data for the years 2012 and 2015
-mcaid.data_filtered <- mcaid.data %>%
-  filter(year %in% c(2012, 2015))
+dd.table <- pivot_wider(dd.table, names_from="year", names_prefix="year", values_from="uninsured") %>% 
+  ungroup() %>%
+  mutate(expand_ever=case_when(
+    expand_ever==FALSE ~ 'Non-expansion',
+    expand_ever==TRUE ~ 'Expansion')
+  ) %>%
+  rename(Group=expand_ever,
+         Pre=year2012,
+         Post=year2015)
 
-# Calculate the difference in the percent uninsured between 2012 and 2015 for each state
-mcaid.data_diff <- mcaid.data_filtered %>%
-  group_by(State) %>%
-  mutate(diff_uninsured = last(uninsured / adult_pop) - first(uninsured / adult_pop))
+dd.table
 
-# Group the data by expand_ever (Medicaid expansion status) and calculate the average difference-in-differences estimator
-avg_did <- mcaid.data_diff %>%
-  group_by(expand_ever) %>%
-  summarise(avg_diff_uninsured = mean(diff_uninsured, na.rm = TRUE))
-
-# Print the result
-print(avg_did)
 
 #Question 6: Estimate the effect of Medicaid expansion on the uninsurance rate using a standard DD regression estimator, 
 #again focusing only on states that expanded in 2014 versus those that never expanded.
