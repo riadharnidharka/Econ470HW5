@@ -103,30 +103,81 @@ dd.table
 #Question 6: Estimate the effect of Medicaid expansion on the uninsurance rate using a standard DD regression estimator, 
 #again focusing only on states that expanded in 2014 versus those that never expanded.
 
+library(tidyverse)
+library(modelsummary)
+mcaid.data <- read_tsv("data/output/acs_medicaid.txt")
+reg.dat <- mcaid.data %>% filter(expand_year==2014 | is.na(expand_year), !is.na(expand_ever)) %>%
+  mutate(perc_unins=uninsured/adult_pop,
+         post = (year>=2014), 
+         treat=post*expand_ever)
+
+dd.ins.reg <- lm(perc_unins ~ post + expand_ever + post*expand_ever, data=reg.dat)
+
+question6 <- modelsummary(list("DD (2014)" = dd.ins.reg),
+                          shape = term + statistic ~ model, 
+                          gof_map = NA,
+                          coef_omit = 'Intercept',
+                          vcov = ~State)
+
+question6
+
 #Question 7: Include state and year fixed effects in your estimates. 
 #Try using the lfe or fixest package to estimate this instead of directly including the fixed effects.
 
-reg.data <- final.data %>% mutate(post=(year>=2014),
-                                  treat=post*expand_ever) %>%
-  filter(is.na(expand_year) | expand_year==2014)
+library(tidyverse)
+library(modelsummary)
+mcaid.data <- read_tsv("data/output/acs_medicaid.txt")
 
-dd.est <- lm(perc_unins~post + expand_ever + treat, data=reg.data)
-fe.est <- feols(perc_unins~treat | State + year, data=reg.data)
+reg.dat <- mcaid.data %>% filter(expand_year==2014 | is.na(expand_year), !is.na(expand_ever)) %>%
+  mutate(perc_unins=uninsured/adult_pop,
+         post = (year>=2014), 
+         treat=post*expand_ever)
 
-dd.est
-fe.est
+m.dd <- lm(perc_unins ~ post + expand_ever + treat, data=reg.dat)
+
+library(fixest)
+m.twfe <- feols(perc_unins ~ treat | State + year, data=reg.dat)
+
+question7 <- msummary(list("DD" = m.dd, "TWFE" = m.twfe),
+                      shape = term + statistic ~ model, 
+                      gof_map = NA,
+                      coef_omit = 'Intercept',
+                      vcov = ~State)
+
+question7
+
 
 #Question 8 
 
-reg.data2 <- final.data %>% 
-  mutate(treat=case_when(
-    year>=expand_year & !is.na(expand_year) ~ 1,
-    is.na(expand_year) ~ 0,
-    year<expand_year & !is.na(expand_year) ~ 0)
-  )
-fe.est2 <- feols(perc_unins~treat | State + year, data=reg.data2)
+library(tidyverse)
+library(modelsummary)
 
-fe.est2
+# Read the data
+mcaid.data <- read_tsv("data/output/acs_medicaid.txt")
+
+# Filter the data to include all states
+reg.dat <- mcaid.data %>%
+  filter(!is.na(expand_ever)) %>%
+  mutate(perc_unins = uninsured / adult_pop,
+         post = (year >= 2014),
+         treat = post * expand_ever)
+
+# Run the Difference-in-Differences (DD) regression
+m.dd <- lm(perc_unins ~ post + expand_ever + treat, data = reg.dat)
+
+# Run the Two-Way Fixed Effects (TWFE) regression
+library(fixest)
+m.twfe <- feols(perc_unins ~ treat | State + year, data = reg.dat)
+
+
+question8 <- msummary(list("DD" = m.dd, "TWFE" = m.twfe),
+                      shape = term + statistic ~ model, 
+                      gof_map = NA,
+                      coef_omit = 'Intercept',
+                      vcov = ~State)
+
+question8
+
 
 #Question 9 
 
